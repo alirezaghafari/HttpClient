@@ -7,8 +7,6 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public class MyRequestPanel extends JPanel {
-    private GridBagConstraints gbc;
-    private GridBagLayout gridBagLayout;
     private JComboBox comboBox;
     private ArrayList<String> requestList;
 
@@ -19,51 +17,38 @@ public class MyRequestPanel extends JPanel {
         requestList.add("Request 2");
 
         setBackground(Color.darkGray);
-
-        gridBagLayout = new GridBagLayout();
-        gbc = new GridBagConstraints();
-        setLayout(gridBagLayout);
-
+        setLayout(new BorderLayout());
 
         addComponents();
-
-
     }
+
 
     /**
      * add button to crates new request
      */
     public void addComponents() {
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.weightx = 0;
-        gbc.weighty = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
 
-
+        JPanel panel1=new JPanel();
         JLabel label = new JLabel("new: ");
         label.setFont(new Font("Arial", 10, 15));
-        gridBagLayout.setConstraints(label, gbc);
         label.setForeground(Color.WHITE);
         label.setSize(10, 10);
-        add(label);
+        panel1.add(label,BorderLayout.PAGE_START);
 
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
         String[] st = {"", "Request", "Folder"};
         comboBox = new JComboBox(st);
-        gridBagLayout.setConstraints(comboBox, gbc);
         comboBox.setPreferredSize(new Dimension(100, 20));
-        add(comboBox);
+        panel1.add(comboBox);
 
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.fill = GridBagConstraints.BOTH;
+        panel1.setSize(200,50);
+        panel1.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+        add(panel1,BorderLayout.NORTH);
 
         JPanel panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
         panel2.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        gbc.gridx = 1;
-        gbc.gridy = 1;
+
         String[] RList = new String[requestList.size()];
         for (int i = 0; i < requestList.size(); i++)
             RList[i] = requestList.get(i);
@@ -74,14 +59,10 @@ public class MyRequestPanel extends JPanel {
         list.setPreferredSize(new Dimension(200, 400));
 
         JScrollPane scrollPane = new JScrollPane(list);
-        gridBagLayout.setConstraints(scrollPane, gbc);
         scrollPane.setPreferredSize(new Dimension(200, 400));
-        panel2.add(scrollPane);
+        panel2.add(scrollPane, BorderLayout.CENTER);
 
-        add(panel2);
-
+        add(panel2, BorderLayout.CENTER);
 
     }
-
-
 }
