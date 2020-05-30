@@ -3,7 +3,7 @@ import org.w3c.dom.ls.LSOutput;
 import java.io.File;
 
 public class FileUtils {
-    private static final String NOTES_PATH = "./notes/";
+    private static final String NOTES_PATH = "./documentations/requests/";
 
     static {
         boolean isSuccessful = new File(NOTES_PATH).mkdirs();
@@ -13,6 +13,9 @@ public class FileUtils {
     public static File[] getFilesInDirectory() {
         return new File(NOTES_PATH).listFiles();
     }
+
+
+
 
 
 

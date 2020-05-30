@@ -23,9 +23,10 @@ public class Run {
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setLayout(new GridLayout(1, 3, 1, 0));
         mainFrame.setSize(1400, 500);
-
         mainFrame.setMinimumSize(new Dimension(1400, 480));
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
+
+
     }
 }

@@ -2,7 +2,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
+
 
 /**
  * this is the first panel of the mainFrame and keeps a list of requests
@@ -13,13 +13,16 @@ import java.util.ArrayList;
 public class MyRequestPanel extends JPanel {
     private JComboBox comboBox;
     private JList<File> requestList;
+    private JPanel topPanel;
+    private JLabel label;
 
 
     public MyRequestPanel() {
         setBackground(Color.darkGray);
         setLayout(new BorderLayout());
 
-        addComponents();
+
+        addTopPanel();
         initDirectoryList();
     }
 
@@ -28,8 +31,9 @@ public class MyRequestPanel extends JPanel {
         requestList = new JList<>(files);
 
         requestList.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-
+        requestList.setForeground(Color.gray);
         requestList.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        requestList.setFixedCellHeight(25);
         requestList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         requestList.setVisibleRowCount(2);
         requestList.setMinimumSize(new Dimension(130, 100));
@@ -45,40 +49,24 @@ public class MyRequestPanel extends JPanel {
     /**
      * add button to crates new request
      */
-    public void addComponents() {
+    public void addTopPanel() {
 
-        JPanel panel1 = new JPanel();
-        JLabel label = new JLabel("new: ");
+        topPanel = new JPanel();
+        label = new JLabel("new: ");
         label.setFont(new Font("Arial", 10, 15));
         label.setForeground(Color.WHITE);
         label.setSize(10, 10);
-        panel1.add(label, BorderLayout.PAGE_START);
+        topPanel.add(label, BorderLayout.PAGE_START);
 
 
         String[] st = {"", "Request", "Folder"};
         comboBox = new JComboBox(st);
         comboBox.setPreferredSize(new Dimension(100, 20));
-        panel1.add(comboBox);
+        topPanel.add(comboBox);
 
-        panel1.setSize(200, 50);
-        panel1.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        add(panel1, BorderLayout.NORTH);
-
-//        JPanel panel2 = new JPanel();
-//        panel2.setLayout(new BorderLayout());
-//        panel2.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-//
-//
-//        list.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-//        list.setFont(new Font("Arial", 10, 15));
-//        list.setForeground(Color.gray);
-//        list.setPreferredSize(new Dimension(200, 400));
-//
-//        JScrollPane scrollPane = new JScrollPane(list);
-//        scrollPane.setPreferredSize(new Dimension(200, 400));
-//        panel2.add(scrollPane, BorderLayout.CENTER);
-//
-//        add(panel2, BorderLayout.CENTER);
+        topPanel.setSize(200, 50);
+        topPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+        add(topPanel, BorderLayout.NORTH);
 
     }
 
@@ -102,4 +90,19 @@ public class MyRequestPanel extends JPanel {
             return this;
         }
     }
+    public void setTheme(Color color){
+        if(color==Color.gray){
+            requestList.setBackground(Color.gray);
+            requestList.setForeground(Color.black);
+            topPanel.setBackground(Color.gray);
+            label.setForeground(Color.black);
+        }else{
+            requestList.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+            requestList.setForeground(Color.gray);
+            topPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+            label.setForeground(Color.WHITE);
+        }
+
+    }
+
 }
