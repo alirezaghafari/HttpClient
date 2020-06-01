@@ -1,14 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+
+
 /**
  * this is the second panel of the mainFrame to compose and send new request
  * @author Alireza Ghafari
- * @version 1.0
+ * @version 2.0
  */
 public class ComposeRequestPanel extends JPanel
 {
-    private GridBagConstraints gbc;
-    private GridBagLayout gridBagLayout;
     private JTextField textField;
     private JScrollPane scrollPane;
     private JButton sendButton;
@@ -16,61 +17,60 @@ public class ComposeRequestPanel extends JPanel
     private JTabbedPane tabbedPane;
     private JPanel tabPanel;
     private JPanel urlPanel;
+    private JPanel headerPanel;
+    private JButton saveButton;
+    private JComboBox bodyComboBox;
+    private JPanel bodyPanel;
+    private JTextArea textArea;
+    private JPanel panel;
+    private JButton removeButton;
+    private JTextField valueField;
+    private JTextField keyField;
+    private JCheckBox checkBox;
+
+
+
+    private static final Color defaultThemeColor = Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f);
+
 
     public ComposeRequestPanel(){
 
+        setLayout(new BorderLayout(0,0));
+        setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        addUrlPanel();
+        addTabbedPane();
+        setTheme("dark");
 
-        setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
-        addComponents();
     }
 
     /**
      * add URL text field and send button
      */
-    public void addComponents(){
-        gridBagLayout=new GridBagLayout();
-        gbc=new GridBagConstraints();
+    public void addUrlPanel(){
+
         urlPanel=new JPanel();
-        urlPanel.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
-        gbc.anchor=GridBagConstraints.NORTH;
-        gbc.weightx=0;
-        gbc.weighty=1;
-        gbc.gridx=0;
-        gbc.gridy=0;
+        urlPanel.setLayout(new BorderLayout(0,0));
+        urlPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         String[] st={"GET","PUT","POST","DELETE","PATCH"};
         comboBox=new JComboBox(st);
-        gridBagLayout.setConstraints(comboBox,gbc);
-        urlPanel.add(comboBox);
+        urlPanel.add(comboBox,BorderLayout.WEST);
 
-        gbc.gridx=1;
-        gbc.gridy=0;
-        textField=new JTextField();
-        textField.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
-        textField.setForeground(Color.white);
+        textField=new HintTextField("https://api.myproduct.com/v1/users");
+        textField.setForeground(Color.gray);
+        textField.setFont(new Font("Arial", 10, 15));
         textField.setEditable(true);
         scrollPane = new JScrollPane(textField);
         scrollPane.setPreferredSize(new Dimension(215, 50));
         scrollPane.setLocation(50,20);
-        gridBagLayout.setConstraints(scrollPane,gbc);
-        urlPanel.add(scrollPane);
+        urlPanel.add(scrollPane,BorderLayout.CENTER);
 
-        gbc.gridx=2;
-        gbc.gridy=0;
+
         sendButton=new JButton("Send");
-        gridBagLayout.setConstraints(sendButton,gbc);
-        urlPanel.add(sendButton);
+        urlPanel.add(sendButton,BorderLayout.EAST);
 
-        add(urlPanel);
-        addTabbedPane();
-        JTextArea textArea = new JTextArea();
-
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setPreferredSize(new Dimension(300, 300));
-        textArea.setEditable(true);
-        scrollPane.add(textArea);
-        add(scrollPane);
-        JButton saveButton=new JButton("Save") ;
-        add(saveButton);
+        saveButton=new JButton("Save request") ;
+        urlPanel.add(saveButton,BorderLayout.SOUTH);
+        add(urlPanel,BorderLayout.NORTH);
 
     }
 
@@ -78,90 +78,245 @@ public class ComposeRequestPanel extends JPanel
      * add tabbed pane to panel
      */
     public void addTabbedPane(){
-        GridBagConstraints gbc3=new GridBagConstraints();
-        GridBagLayout gridBagLayout=new GridBagLayout();
         tabPanel=new JPanel();
-        tabPanel.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
 
-        tabPanel.setLayout(gridBagLayout);
 
-        gbc3.gridx=0;
-        gbc3.gridy=1;
         tabbedPane=new JTabbedPane();
-        gridBagLayout.setConstraints(tabbedPane,gbc3);
+        tabbedPane.setPreferredSize(new Dimension(470,990));
+
         String[] st2={"","From Data","JSON","Binary Data"};
-        JComboBox bodyComboBox= new JComboBox(st2);
-        JPanel bodyPanel=new JPanel();
-        bodyPanel.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
-        bodyPanel.add(bodyComboBox);
+        bodyComboBox= new JComboBox(st2);
+
+        bodyPanel=new JPanel();
+        bodyPanel.setPreferredSize(new Dimension(400,950));
+        bodyPanel.setLayout(new BorderLayout(0,0));
+        bodyPanel.add(bodyComboBox,BorderLayout.NORTH);
+        textArea = new HintTextArea("request body...");
+        textArea.setFont(new Font("Arial", 10, 13));
+        textArea.setEditable(true);
+        textArea.setForeground(Color.gray);
+        scrollPane = new JScrollPane(textArea);
+        bodyPanel.add(scrollPane);
         tabbedPane.add("Body",bodyPanel);
 
-        JPanel headerPanel=new JPanel();
-        headerPanel.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
+        headerPanel=new JPanel();
+        headerPanel.setLayout(new GridLayout(20,1));
+        addKeyAndValue();
+        addKeyAndValue();
+        addKeyAndValue();
 
-        addKeyAndValue(headerPanel);
 
 
-        tabbedPane.add("Header",headerPanel);
+        JScrollPane headersScroller= new JScrollPane(headerPanel);
+        tabbedPane.add("Header",headersScroller);
         tabPanel.add(tabbedPane);
         add(tabPanel);
     }
     /**
      * add text box to panel
-     * @param headerPanel the panel which keeps headers
      */
-    public void addKeyAndValue(JPanel headerPanel){
+    public void addKeyAndValue(){
 
-        JPanel panel=new JPanel();
-        panel.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
+        panel=new JPanel();
 
-
-        GridBagLayout gridBagLayout2=new GridBagLayout();
-        GridBagConstraints gbc2=new GridBagConstraints();
-        headerPanel.setLayout(gridBagLayout2);
-        JTextField keyField=new JTextField();
-        JTextField valueField=new JTextField();
-        keyField.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        valueField.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        keyField.setForeground(Color.white);
-        valueField.setForeground(Color.white);
-
-
+        keyField=new HintTextField("new header");
+        keyField.setForeground(Color.gray);
         keyField.setEditable(true);
-        valueField.setEditable(true);
         JScrollPane scrollPane2 = new JScrollPane(keyField);
-        gbc2.gridx=0;
-        gbc2.gridy=0;
         scrollPane2.setPreferredSize(new Dimension(180, 40));
         scrollPane2.setLocation(50,20);
-        gridBagLayout.setConstraints(scrollPane2,gbc2);
         panel.add(scrollPane2);
+
+        valueField=new HintTextField("new value");
+        valueField.setForeground(Color.gray);
+        valueField.setEditable(true);
         JScrollPane scrollPane3 = new JScrollPane(valueField);
-        gbc2.gridx=1;
-        gbc2.gridy=0;
         scrollPane3.setPreferredSize(new Dimension(180, 40));
         scrollPane3.setLocation(50,20);
-        gridBagLayout.setConstraints(scrollPane3,gbc2);
         panel.add(scrollPane3);
-        JButton removeButton =new JButton("\u2573");
+
+        removeButton =new JButton("\u2573");
         removeButton.setToolTipText("remove");
-        gbc2.gridx=2;
-        gbc2.gridy=0;
-        gridBagLayout.setConstraints(removeButton,gbc2);
-        removeButton.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
         panel.add(removeButton);
 
-        JCheckBox checkBox =new JCheckBox();
-        gbc2.gridx=3;
-        gbc2.gridy=0;
-        gridBagLayout.setConstraints(checkBox,gbc2);
-        checkBox.setBackground(Color.getHSBColor(0.16666667f,0.06666667f,0.1764706f));
+        checkBox =new JCheckBox();
+
         panel.add(checkBox);
 
         headerPanel.add(panel);
 
+        if ((MainFrame.theme == Theme.dark)) {
+            setTheme("dark");
+        } else {
+            setTheme("light");
+        }
 
 
+        addHandler(keyField,valueField,removeButton);
+    }
+    /**
+     * an inner class to put hint on text fields
+     */
+    class HintTextField extends JTextField implements FocusListener {
+
+        private final String hint;
+        private boolean showingHint;
+
+        public HintTextField(final String hint) {
+            super(hint);
+            this.hint = hint;
+            this.showingHint = true;
+            super.addFocusListener(this);
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            if(this.getText().isEmpty()) {
+                if(MainFrame.theme==Theme.dark)
+                    super.setForeground(Color.white);
+                else
+                    super.setForeground(Color.darkGray);
+                super.setText("");
+                showingHint = false;
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            if(this.getText().isEmpty()) {
+                super.setForeground(Color.gray);
+                super.setText(hint);
+                showingHint = true;
+            }
+        }
+
+        @Override
+        public String getText() {
+            return showingHint ? "" : super.getText();
+        }
+    }
+
+    /**
+     * an inner class to put hint on text areas
+     */
+    class HintTextArea extends JTextArea implements FocusListener {
+
+        private final String hint;
+        private boolean showingHint;
+
+        public HintTextArea(final String hint) {
+            super(hint);
+            this.hint = hint;
+            this.showingHint = true;
+            super.addFocusListener(this);
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            if(this.getText().isEmpty()) {
+                if(MainFrame.theme==Theme.dark)
+                    super.setForeground(Color.white);
+                else
+                    super.setForeground(Color.darkGray);
+                super.setText("");
+                showingHint = false;
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            if(this.getText().isEmpty()) {
+                super.setForeground(Color.gray);
+                super.setText(hint);
+                showingHint = true;
+            }
+        }
+
+        @Override
+        public String getText() {
+            return showingHint ? "" : super.getText();
+        }
+    }
+
+    /**
+     * set the theme of panel
+     * @param st to determine that theme should be dark or light
+     */
+    public void setTheme(String st){
+        if(st.equalsIgnoreCase("light")){
+            setBackground(Color.white);
+            urlPanel.setBackground(Color.white);
+            textField.setBackground(Color.white);
+            saveButton.setBackground(Color.white);
+            tabPanel.setBackground(Color.white);
+            bodyPanel.setBackground(Color.white);
+            textArea.setBackground(Color.white);
+            headerPanel.setBackground(Color.white);
+            checkBox.setBackground(Color.white);
+            saveButton.setForeground(Color.darkGray);
+            sendButton.setBackground(Color.white);
+            sendButton.setForeground(Color.darkGray);
+            comboBox.setBackground(Color.gray);
+            bodyComboBox.setBackground(Color.gray);
+            setBackground(Color.gray);
+
+            for(Component component:headerPanel.getComponents()){
+                JPanel tempPanel = (JPanel) component;
+                tempPanel.getComponent(2).setBackground(Color.white);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(Color.white);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(Color.white);
+                tempPanel.setBackground(Color.white);
+            }
+        }else{
+            setBackground(defaultThemeColor);
+            urlPanel.setBackground(defaultThemeColor);
+            textField.setBackground(defaultThemeColor);
+            saveButton.setBackground(defaultThemeColor);
+            sendButton.setBackground(defaultThemeColor);
+            sendButton.setForeground(Color.white);
+            checkBox.setBackground(defaultThemeColor);
+            saveButton.setForeground(Color.white);
+            comboBox.setBackground(defaultThemeColor);
+
+            tabPanel.setBackground(defaultThemeColor);
+            bodyPanel.setBackground(defaultThemeColor);
+            textArea.setBackground(defaultThemeColor);
+
+            headerPanel.setBackground(defaultThemeColor);
+
+            bodyComboBox.setBackground(defaultThemeColor);
+            for(Component component:headerPanel.getComponents()){
+                JPanel tempPanel = (JPanel) component;
+                tempPanel.getComponent(2).setBackground(defaultThemeColor);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultThemeColor);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultThemeColor);
+                tempPanel.setBackground(defaultThemeColor);
+
+            }
+        }
+        revalidate();
+        repaint();
+
+    }
+    public void addHandler(JTextField keyField, JTextField valueField, JButton removeButton){
+        MouseAdapter addField =new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Component c =(Component)e.getSource();
+                if(c.getParent().getParent().getParent()==headerPanel.getComponent(headerPanel.getComponentCount()-1))
+                    addKeyAndValue();
+                revalidate();
+                repaint();
+            }
+        };
+        keyField.addMouseListener(addField);
+        valueField.addMouseListener(addField);
+
+        removeButton.addActionListener(e -> {
+            Component c =(Component)e.getSource();
+            if(e.getSource() instanceof JButton)
+                headerPanel.remove(c.getParent());
+            ComposeRequestPanel.this.revalidate();
+            ComposeRequestPanel.this.repaint();
+        });
     }
 
 

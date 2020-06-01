@@ -8,30 +8,30 @@ import java.io.File;
  * this is the first panel of the mainFrame and keeps a list of requests
  *
  * @author Alireza Ghafari
- * @version 1.0
+ * @version 2.0
  */
 public class MyRequestPanel extends JPanel {
     private JComboBox comboBox;
     private JList<File> requestList;
     private JPanel topPanel;
     private JLabel label;
-
+    private static final Color defaultThemeColor = Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f);
 
     public MyRequestPanel() {
-        setBackground(Color.darkGray);
-        setLayout(new BorderLayout());
 
+        setLayout(new BorderLayout(0,0));
 
         addTopPanel();
         initDirectoryList();
+        setTheme("dark");
+
     }
 
     private void initDirectoryList() {
         File[] files = FileUtils.getFilesInDirectory();
         requestList = new JList<>(files);
 
-        requestList.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        requestList.setForeground(Color.gray);
+
         requestList.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         requestList.setFixedCellHeight(25);
         requestList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -65,8 +65,10 @@ public class MyRequestPanel extends JPanel {
         topPanel.add(comboBox);
 
         topPanel.setSize(200, 50);
-        topPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+        topPanel.setBackground(defaultThemeColor);
         add(topPanel, BorderLayout.NORTH);
+
+
 
     }
 
@@ -90,17 +92,20 @@ public class MyRequestPanel extends JPanel {
             return this;
         }
     }
-    public void setTheme(Color color){
-        if(color==Color.gray){
-            requestList.setBackground(Color.gray);
-            requestList.setForeground(Color.black);
-            topPanel.setBackground(Color.gray);
-            label.setForeground(Color.black);
+    public void setTheme(String st){
+        if(st.equalsIgnoreCase("light")){
+            requestList.setBackground(new Color(133,125,202));
+            requestList.setForeground(Color.white);
+            topPanel.setBackground(new Color(133,125,202));
+            label.setForeground(Color.white);
+            setBackground(Color.white);
         }else{
-            requestList.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-            requestList.setForeground(Color.gray);
-            topPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+            requestList.setBackground(new Color(50,51,48));
+            requestList.setForeground(Color.white);
+            topPanel.setBackground(new Color(50,51,48));
             label.setForeground(Color.WHITE);
+            setBackground(defaultThemeColor);
+
         }
 
     }

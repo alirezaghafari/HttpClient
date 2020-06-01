@@ -4,7 +4,7 @@ import java.awt.*;
 /**
  * this is Main class to run main method and create mainframe
  * @author Alireza Ghafari
- * @version 1.0
+ * @version 2.0
  */
 public class Run {
     public static void main(String[] args) {

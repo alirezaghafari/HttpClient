@@ -3,28 +3,37 @@ import java.awt.*;
 /**
  * this is the third panel of the mainFrame to show the result of requests
  * @author Alireza Ghafari
- * @version 1.0
+ * @version 2.0
  */
 public class ResponsePanel extends JPanel {
     private JPanel barPanel;
-    private JTextField statusCode;
+    private JTextField codeStatus;
     private JTextField timeStatus;
-    JTabbedPane tabbedPane;
-    private GridBagConstraints gbc;
-    private GridBagLayout gridBagLayout;
+    private JTextField sizeStatus;
+    private JTabbedPane tabbedPane;
     private JPanel tabPanel;
+    private JTextField valueField;
+    private JTextField keyField;
+    private JPanel panel;
+    private JPanel headerPanel;
+    private JScrollPane scrollPane;
+    private JTextArea textArea;
+    private JPanel bodyPanel;
+    private JComboBox bodyComboBox;
+    private JButton copyButton;
+    private static final Color defaultThemeColor = Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f);
+
 
 
     public ResponsePanel() {
-
-        setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
+        setLayout(new BorderLayout());
         addComponents();
+        setTheme("dark");
     }
 
     public void addComponents() {
         addBarPanel();
         addTabbedPane();
-        addCopyToClipBoard();
     }
 
     /**
@@ -33,98 +42,78 @@ public class ResponsePanel extends JPanel {
     public void addBarPanel() {
         barPanel = new JPanel();
         barPanel.setPreferredSize(new Dimension(500, 40));
-        statusCode = new JTextField();
+        codeStatus = new JTextField();
         timeStatus = new JTextField();
-        statusCode.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        statusCode.setForeground(Color.white);
-        timeStatus.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        timeStatus.setForeground(Color.white);
-        statusCode.setEditable(false);
+        sizeStatus =new JTextField();
+
+        codeStatus.setEditable(false);
         timeStatus.setEditable(false);
-        statusCode.setPreferredSize(new Dimension(60, 30));
+        sizeStatus.setEditable(false);
+        codeStatus.setPreferredSize(new Dimension(60, 30));
         timeStatus.setPreferredSize(new Dimension(60, 30));
-        barPanel.add(statusCode);
+        sizeStatus.setPreferredSize(new Dimension(60, 30));
+        barPanel.add(codeStatus);
         barPanel.add(timeStatus);
-        add(barPanel);
+        barPanel.add(sizeStatus);
+        add(barPanel,BorderLayout.NORTH);
     }
 
     /**
      * a method to add tabbed pane to panel
      */
     public void addTabbedPane() {
-        gbc = new GridBagConstraints();
-        gridBagLayout = new GridBagLayout();
         tabPanel = new JPanel();
-        tabPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        tabPanel.setLayout(gridBagLayout);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
         tabbedPane = new JTabbedPane();
-        gridBagLayout.setConstraints(tabbedPane, gbc);
 
-        String[] st2 = {"Raw", "Preview"};
-        JComboBox bodyComboBox = new JComboBox(st2);
-        JPanel bodyPanel = new JPanel();
-        bodyPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        bodyPanel.add(bodyComboBox);
-        JTextArea textArea = new JTextArea();
+        tabbedPane.setPreferredSize(new Dimension(460,1020));
+        String[] st2 = {"","Raw", "Preview"};
+        bodyComboBox = new JComboBox(st2);
 
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setPreferredSize(new Dimension(300, 300));
-        scrollPane.add(textArea);
-
+        bodyPanel=new JPanel();
+        bodyPanel.setPreferredSize(new Dimension(400,900));
+        bodyPanel.setLayout(new BorderLayout(0,0));
+        bodyPanel.add(bodyComboBox,BorderLayout.NORTH);
+        copyButton = new JButton("Copy To Clipboard");
+        bodyPanel.add(copyButton,BorderLayout.SOUTH);
+        textArea = new JTextArea();
+        textArea.setFont(new Font("Arial", 10, 13));
+        scrollPane = new JScrollPane(textArea);
+        textArea.setEditable(false);
+        bodyPanel.add(scrollPane);
         bodyPanel.add(scrollPane);
         tabbedPane.add("Body", bodyPanel);
 
-        JPanel headerPanel = new JPanel();
-        headerPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
 
-        addKeyAndValue(headerPanel);
-
-
+        headerPanel = new JPanel();
+        headerPanel.setLayout(new GridLayout(20,1));
+        addKeyAndValue();
+        addKeyAndValue();
         tabbedPane.add("Header", headerPanel);
+
         tabPanel.add(tabbedPane);
+
         add(tabPanel);
     }
 
     /**
      * add text box to panel
-     * @param headerPanel the panel which keeps headers
      */
-    public void addKeyAndValue(JPanel headerPanel) {
+    public void addKeyAndValue() {
 
+        panel=new JPanel();
 
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-
-
-        GridBagLayout gridBagLayout2 = new GridBagLayout();
-        GridBagConstraints gbc2 = new GridBagConstraints();
-        headerPanel.setLayout(gridBagLayout2);
-        JTextField keyField = new JTextField();
-        JTextField valueField = new JTextField();
-        keyField.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        valueField.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        keyField.setForeground(Color.white);
-        valueField.setForeground(Color.white);
-
-
+        keyField=new JTextField();
         keyField.setEditable(false);
-        valueField.setEditable(false);
         JScrollPane scrollPane2 = new JScrollPane(keyField);
-        gbc2.gridx = 0;
-        gbc2.gridy = 0;
-        scrollPane2.setPreferredSize(new Dimension(220, 40));
-        scrollPane2.setLocation(50, 20);
-        gridBagLayout.setConstraints(scrollPane2, gbc2);
+        scrollPane2.setPreferredSize(new Dimension(180, 40));
+        scrollPane2.setLocation(50,20);
         panel.add(scrollPane2);
+
+        valueField=new JTextField();
+        valueField.setEditable(false);
         JScrollPane scrollPane3 = new JScrollPane(valueField);
-        gbc2.gridx = 1;
-        gbc2.gridy = 0;
-        scrollPane3.setPreferredSize(new Dimension(220, 40));
-        scrollPane3.setLocation(50, 20);
-        gridBagLayout.setConstraints(scrollPane3, gbc2);
+        scrollPane3.setPreferredSize(new Dimension(180, 40));
+        scrollPane3.setLocation(50,20);
         panel.add(scrollPane3);
 
 
@@ -132,11 +121,74 @@ public class ResponsePanel extends JPanel {
 
     }
 
-    public void addCopyToClipBoard() {
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-        JButton copy = new JButton("Copy To Clipboard");
-        panel.add(copy);
-        add(panel);
+
+    /**
+     * set the theme of panel
+     * @param st to determine that theme should be dark or light
+     */
+    public void setTheme(String st){
+        if(st.equalsIgnoreCase("light")){
+            setBackground(Color.white);
+            barPanel.setBackground(Color.white);
+            headerPanel.setBackground(Color.white);
+            bodyPanel.setBackground(Color.white);
+            codeStatus.setBackground(Color.gray);
+            timeStatus.setBackground(Color.gray);
+            sizeStatus.setBackground(Color.gray);
+            tabPanel.setBackground(Color.white);
+            textArea.setBackground(Color.white);
+            bodyComboBox.setBackground(Color.white);
+            copyButton.setBackground(Color.gray);
+            bodyComboBox.setBackground(Color.gray);
+            setBackground(Color.gray);
+
+            codeStatus.setForeground(Color.white);
+            timeStatus.setForeground(Color.white);
+            sizeStatus.setForeground(Color.white);
+            textArea.setForeground(Color.darkGray);
+            copyButton.setForeground(Color.darkGray);
+
+            for(Component component:headerPanel.getComponents()){
+                JPanel tempPanel = (JPanel) component;
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(Color.white);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(Color.white);
+                tempPanel.setBackground(Color.white);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setForeground(Color.darkGray);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setForeground(Color.darkGray);
+            }
+
+
+        }else{
+            setBackground(defaultThemeColor);
+            barPanel.setBackground(defaultThemeColor);
+            headerPanel.setBackground(defaultThemeColor);
+            bodyPanel.setBackground(defaultThemeColor);
+            codeStatus.setBackground(Color.gray);
+            timeStatus.setBackground(Color.gray);
+            sizeStatus.setBackground(Color.gray);
+            tabPanel.setBackground(defaultThemeColor);
+            textArea.setBackground(defaultThemeColor);
+            bodyComboBox.setBackground(defaultThemeColor);
+            copyButton.setBackground(defaultThemeColor);
+
+            codeStatus.setForeground(Color.white);
+            timeStatus.setForeground(Color.white);
+            sizeStatus.setForeground(Color.white);
+            textArea.setForeground(Color.white);
+            bodyComboBox.setForeground(Color.white);
+            copyButton.setForeground(Color.white);
+
+            for(Component component:headerPanel.getComponents()){
+                JPanel tempPanel = (JPanel) component;
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultThemeColor);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultThemeColor);
+                tempPanel.setBackground(defaultThemeColor);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setForeground(Color.white);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setForeground(Color.white);
+            }
+        }
+            revalidate();
+            repaint();
+
     }
 }

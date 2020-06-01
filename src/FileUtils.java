@@ -1,7 +1,10 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.io.File;
 
+/**
+ * a class to manage any operation on files
+ * @author Alireza Ghafari
+ * @version 1.0
+ */
 public class FileUtils {
     private static final String NOTES_PATH = "./documentations/requests/";
 
