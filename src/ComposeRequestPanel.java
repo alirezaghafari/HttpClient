@@ -30,7 +30,8 @@ public class ComposeRequestPanel extends JPanel
 
 
 
-    private static final Color defaultThemeColor = Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f);
+    private static final Color defaultDarkThemeColor = new Color(45,48,55);
+    private static final Color defaultLightThemeColor = new Color(251,246,227);
 
 
     public ComposeRequestPanel(){
@@ -242,17 +243,17 @@ public class ComposeRequestPanel extends JPanel
      */
     public void setTheme(String st){
         if(st.equalsIgnoreCase("light")){
-            setBackground(Color.white);
-            urlPanel.setBackground(Color.white);
-            textField.setBackground(Color.white);
-            saveButton.setBackground(Color.white);
-            tabPanel.setBackground(Color.white);
-            bodyPanel.setBackground(Color.white);
-            textArea.setBackground(Color.white);
-            headerPanel.setBackground(Color.white);
-            checkBox.setBackground(Color.white);
+            setBackground(defaultLightThemeColor);
+            urlPanel.setBackground(defaultLightThemeColor);
+            textField.setBackground(defaultLightThemeColor);
+            saveButton.setBackground(defaultLightThemeColor);
+            tabPanel.setBackground(defaultLightThemeColor);
+            bodyPanel.setBackground(defaultLightThemeColor);
+            textArea.setBackground(defaultLightThemeColor);
+            headerPanel.setBackground(defaultLightThemeColor);
+            checkBox.setBackground(defaultLightThemeColor);
             saveButton.setForeground(Color.darkGray);
-            sendButton.setBackground(Color.white);
+            sendButton.setBackground(defaultLightThemeColor);
             sendButton.setForeground(Color.darkGray);
             comboBox.setBackground(Color.gray);
             bodyComboBox.setBackground(Color.gray);
@@ -260,35 +261,35 @@ public class ComposeRequestPanel extends JPanel
 
             for(Component component:headerPanel.getComponents()){
                 JPanel tempPanel = (JPanel) component;
-                tempPanel.getComponent(2).setBackground(Color.white);
-                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(Color.white);
-                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(Color.white);
-                tempPanel.setBackground(Color.white);
+                tempPanel.getComponent(2).setBackground(defaultLightThemeColor);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultLightThemeColor);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultLightThemeColor);
+                tempPanel.setBackground(defaultLightThemeColor);
             }
         }else{
-            setBackground(defaultThemeColor);
-            urlPanel.setBackground(defaultThemeColor);
-            textField.setBackground(defaultThemeColor);
-            saveButton.setBackground(defaultThemeColor);
-            sendButton.setBackground(defaultThemeColor);
+            setBackground(defaultDarkThemeColor);
+            urlPanel.setBackground(defaultDarkThemeColor);
+            textField.setBackground(defaultDarkThemeColor);
+            saveButton.setBackground(defaultDarkThemeColor);
+            sendButton.setBackground(defaultDarkThemeColor);
             sendButton.setForeground(Color.white);
-            checkBox.setBackground(defaultThemeColor);
+            checkBox.setBackground(defaultDarkThemeColor);
             saveButton.setForeground(Color.white);
-            comboBox.setBackground(defaultThemeColor);
+            comboBox.setBackground(defaultDarkThemeColor);
 
-            tabPanel.setBackground(defaultThemeColor);
-            bodyPanel.setBackground(defaultThemeColor);
-            textArea.setBackground(defaultThemeColor);
+            tabPanel.setBackground(defaultDarkThemeColor);
+            bodyPanel.setBackground(defaultDarkThemeColor);
+            textArea.setBackground(defaultDarkThemeColor);
 
-            headerPanel.setBackground(defaultThemeColor);
+            headerPanel.setBackground(defaultDarkThemeColor);
 
-            bodyComboBox.setBackground(defaultThemeColor);
+            bodyComboBox.setBackground(defaultDarkThemeColor);
             for(Component component:headerPanel.getComponents()){
                 JPanel tempPanel = (JPanel) component;
-                tempPanel.getComponent(2).setBackground(defaultThemeColor);
-                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultThemeColor);
-                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultThemeColor);
-                tempPanel.setBackground(defaultThemeColor);
+                tempPanel.getComponent(2).setBackground(defaultDarkThemeColor);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultDarkThemeColor);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultDarkThemeColor);
+                tempPanel.setBackground(defaultDarkThemeColor);
 
             }
         }

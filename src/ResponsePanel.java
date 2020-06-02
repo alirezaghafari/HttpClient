@@ -21,7 +21,9 @@ public class ResponsePanel extends JPanel {
     private JPanel bodyPanel;
     private JComboBox bodyComboBox;
     private JButton copyButton;
-    private static final Color defaultThemeColor = Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f);
+    private static final Color defaultDarkThemeColor = new Color(45,48,55);
+    private static final Color defaultLightThemeColor = new Color(251,246,227);
+
 
 
 
@@ -128,16 +130,16 @@ public class ResponsePanel extends JPanel {
      */
     public void setTheme(String st){
         if(st.equalsIgnoreCase("light")){
-            setBackground(Color.white);
-            barPanel.setBackground(Color.white);
-            headerPanel.setBackground(Color.white);
-            bodyPanel.setBackground(Color.white);
+            setBackground(defaultLightThemeColor);
+            barPanel.setBackground(defaultLightThemeColor);
+            headerPanel.setBackground(defaultLightThemeColor);
+            bodyPanel.setBackground(defaultLightThemeColor);
             codeStatus.setBackground(Color.gray);
             timeStatus.setBackground(Color.gray);
             sizeStatus.setBackground(Color.gray);
-            tabPanel.setBackground(Color.white);
-            textArea.setBackground(Color.white);
-            bodyComboBox.setBackground(Color.white);
+            tabPanel.setBackground(defaultLightThemeColor);
+            textArea.setBackground(defaultLightThemeColor);
+            bodyComboBox.setBackground(defaultLightThemeColor);
             copyButton.setBackground(Color.gray);
             bodyComboBox.setBackground(Color.gray);
             setBackground(Color.gray);
@@ -150,26 +152,26 @@ public class ResponsePanel extends JPanel {
 
             for(Component component:headerPanel.getComponents()){
                 JPanel tempPanel = (JPanel) component;
-                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(Color.white);
-                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(Color.white);
-                tempPanel.setBackground(Color.white);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultLightThemeColor);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultLightThemeColor);
+                tempPanel.setBackground(defaultLightThemeColor);
                 ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setForeground(Color.darkGray);
                 ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setForeground(Color.darkGray);
             }
 
 
         }else{
-            setBackground(defaultThemeColor);
-            barPanel.setBackground(defaultThemeColor);
-            headerPanel.setBackground(defaultThemeColor);
-            bodyPanel.setBackground(defaultThemeColor);
+            setBackground(defaultDarkThemeColor);
+            barPanel.setBackground(defaultDarkThemeColor);
+            headerPanel.setBackground(defaultDarkThemeColor);
+            bodyPanel.setBackground(defaultDarkThemeColor);
             codeStatus.setBackground(Color.gray);
             timeStatus.setBackground(Color.gray);
             sizeStatus.setBackground(Color.gray);
-            tabPanel.setBackground(defaultThemeColor);
-            textArea.setBackground(defaultThemeColor);
-            bodyComboBox.setBackground(defaultThemeColor);
-            copyButton.setBackground(defaultThemeColor);
+            tabPanel.setBackground(defaultDarkThemeColor);
+            textArea.setBackground(defaultDarkThemeColor);
+            bodyComboBox.setBackground(defaultDarkThemeColor);
+            copyButton.setBackground(defaultDarkThemeColor);
 
             codeStatus.setForeground(Color.white);
             timeStatus.setForeground(Color.white);
@@ -180,9 +182,9 @@ public class ResponsePanel extends JPanel {
 
             for(Component component:headerPanel.getComponents()){
                 JPanel tempPanel = (JPanel) component;
-                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultThemeColor);
-                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultThemeColor);
-                tempPanel.setBackground(defaultThemeColor);
+                ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setBackground(defaultDarkThemeColor);
+                ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setBackground(defaultDarkThemeColor);
+                tempPanel.setBackground(defaultDarkThemeColor);
                 ((JScrollPane) tempPanel.getComponent(0)).getViewport().getView().setForeground(Color.white);
                 ((JScrollPane) tempPanel.getComponent(1)).getViewport().getView().setForeground(Color.white);
             }

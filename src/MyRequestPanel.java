@@ -15,7 +15,7 @@ public class MyRequestPanel extends JPanel {
     private JList<File> requestList;
     private JPanel topPanel;
     private JLabel label;
-    private static final Color defaultThemeColor = Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f);
+    private static final Color defaultThemeColor = new Color(35,38,43);
 
     public MyRequestPanel() {
 
@@ -94,15 +94,15 @@ public class MyRequestPanel extends JPanel {
     }
     public void setTheme(String st){
         if(st.equalsIgnoreCase("light")){
-            requestList.setBackground(new Color(133,125,202));
+            requestList.setBackground(new Color(34,57,68));
             requestList.setForeground(Color.white);
-            topPanel.setBackground(new Color(133,125,202));
+            topPanel.setBackground(new Color(34,57,68));
             label.setForeground(Color.white);
             setBackground(Color.white);
         }else{
-            requestList.setBackground(new Color(50,51,48));
+            requestList.setBackground(defaultThemeColor);
             requestList.setForeground(Color.white);
-            topPanel.setBackground(new Color(50,51,48));
+            topPanel.setBackground(defaultThemeColor);
             label.setForeground(Color.WHITE);
             setBackground(defaultThemeColor);
 
