@@ -7,6 +7,7 @@ import java.awt.*;
  * @version 2.0
  */
 public class Run {
+    static MainFrame mainFrame;
     public static void main(String[] args) {
 
         try {
@@ -19,14 +20,14 @@ public class Run {
         } catch (Exception e) {
         }
 
-        MainFrame mainFrame = new MainFrame("Insomnia");
+        mainFrame = new MainFrame("Insomnia");
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setLayout(new GridLayout(1, 3, 1, 0));
         mainFrame.setSize(1400, 500);
         mainFrame.setMinimumSize(new Dimension(1400, 480));
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
-
+        SettingPanel.initializeSetting();
 
     }
 }

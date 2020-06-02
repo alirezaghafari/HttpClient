@@ -11,18 +11,10 @@ enum Theme{
  * @version 2.0
  */
 public class MainFrame extends JFrame  {
-    private MyRequestPanel myRequestPanel;
-    private ComposeRequestPanel composeRequestPanel;
-    private ResponsePanel responsePanel;
+    static MyRequestPanel myRequestPanel;
+    static ComposeRequestPanel composeRequestPanel;
+    static ResponsePanel responsePanel;
     private JMenuBar menuBar;
-    private JFrame optionFrame;
-    private Checkbox exitOnClose;
-    private JComboBox themeBox;
-    private Checkbox followRedirect;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JPanel optionMainPanel;
 
     static Theme theme=Theme.dark;
 
@@ -31,6 +23,7 @@ public class MainFrame extends JFrame  {
     public MainFrame(String title) {
         super(title);
         setBackground(Color.black);
+
 
         myRequestPanel = new MyRequestPanel();
         composeRequestPanel = new ComposeRequestPanel();
@@ -42,6 +35,7 @@ public class MainFrame extends JFrame  {
         menuBar.setBackground(Color.darkGray);
         manageMenu();
         setJMenuBar(menuBar);
+
 
     }
 
@@ -64,89 +58,17 @@ public class MainFrame extends JFrame  {
         //add exit item
         JMenuItem exit = new JMenuItem("Exit");
         exit.setToolTipText("Do you want to exit?");
-        exit.addActionListener(e -> System.exit(0));
+        exit.addActionListener(e -> {
+            System.exit(0);
+        });
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK));
         application.add(exit);
 
         //add option item
         JMenuItem option = new JMenuItem("Option");
-
-        optionFrame=new JFrame("Insomnia Preferences");
-        followRedirect=new Checkbox();
-        exitOnClose=new Checkbox();
-        exitOnClose.setState(true);
-        exitOnClose.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if(exitOnClose.getState())
-                    MainFrame.this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                else
-                    MainFrame.this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-            }
-        });
-        String[] st = {"Dark","Light"};
-        themeBox=new JComboBox(st);
-        optionMainPanel=new JPanel();
-        optionMainPanel.setLayout(new GridLayout(3, 2, 50, 30));
-        optionFrame.setSize(450, 200);
-        optionFrame.setMinimumSize(new Dimension(450, 200));
-
-
-
-        label1=new JLabel("             Follow redirect: ");
-        label1.setFont(new Font("Arial", 10, 15));
-        optionMainPanel.add(label1);
-        optionMainPanel.add(followRedirect);
-        label2=new JLabel("             Exit on close: ");
-        label2.setFont(new Font("Arial", 10, 15));
-        optionMainPanel.add(label2);
-        optionMainPanel.add(exitOnClose);
-        label3=new JLabel("             Theme: ");
-        label3.setFont(new Font("Arial", 10, 15));
-        optionMainPanel.add(label3);
-        optionMainPanel.add(themeBox);
-
-
-        optionFrame.setResizable(false);
-        optionFrame.setLocationRelativeTo(null);
-        optionFrame.setVisible(true);
-
-        optionFrame.add(optionMainPanel);
-
-        themeBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(themeBox.getSelectedIndex()==0) {
-                    theme=Theme.dark;
-                    myRequestPanel.setTheme("Dark");
-                    composeRequestPanel.setTheme("Dark");
-                    responsePanel.setTheme("Dark");
-                    optionFrame.setBackground(new Color(213,216,222));
-                    label1.setForeground(Color.black);
-                    label2.setForeground(Color.black);
-                    label3.setForeground(Color.black);
-                    optionMainPanel.setBackground(new Color(213,216,222));
-                    MainFrame.this.setBackground(Color.black);
-                }
-                else {
-                    theme=Theme.light;
-                    myRequestPanel.setTheme("Light");
-                    composeRequestPanel.setTheme("Light");
-                    responsePanel.setTheme("Light");
-                    optionFrame.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-                    label1.setForeground(Color.white);
-                    label2.setForeground(Color.white);
-                    label3.setForeground(Color.white);
-                    optionMainPanel.setBackground(Color.getHSBColor(0.16666667f, 0.06666667f, 0.1764706f));
-                    MainFrame.this.setBackground(new Color(133,125,202));
-                }
-                MainFrame.this.revalidate();
-                MainFrame.this.repaint();
-            }
-        });
-
+        SettingPanel.settingHandler();
         option.addActionListener(e -> {
-            optionFrame.show();
+            SettingPanel.optionFrame.show();
         });
         option.setToolTipText("Need Options?");
         option.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.ALT_DOWN_MASK));

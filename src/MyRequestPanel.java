@@ -23,7 +23,10 @@ public class MyRequestPanel extends JPanel {
 
         addTopPanel();
         initDirectoryList();
-        setTheme("dark");
+        if(MainFrame.theme==Theme.dark)
+            setTheme("dark");
+        else
+            setTheme("light");
 
     }
 

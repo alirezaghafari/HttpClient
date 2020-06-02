@@ -40,7 +40,10 @@ public class ComposeRequestPanel extends JPanel
         setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         addUrlPanel();
         addTabbedPane();
-        setTheme("dark");
+        if(MainFrame.theme==Theme.dark)
+            setTheme("dark");
+        else
+            setTheme("light");
 
     }
 

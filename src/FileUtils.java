@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 
 /**
  * a class to manage any operation on files
@@ -15,6 +15,16 @@ public class FileUtils {
 
     public static File[] getFilesInDirectory() {
         return new File(NOTES_PATH).listFiles();
+    }
+
+
+    public static void settingWriter(String st){
+        try(FileWriter fileWriter=new FileWriter("./documentations/setting/Options.txt");
+        BufferedWriter bufferedWriter=new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(st);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -30,7 +30,10 @@ public class ResponsePanel extends JPanel {
     public ResponsePanel() {
         setLayout(new BorderLayout());
         addComponents();
-        setTheme("dark");
+        if(MainFrame.theme==Theme.dark)
+            setTheme("dark");
+        else
+            setTheme("light");
     }
 
     public void addComponents() {
