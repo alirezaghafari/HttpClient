@@ -1,12 +1,21 @@
 package httpClientBack;
 
 
+import httpClientBack.utils.FileUtils;
+
+import java.io.Closeable;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+/**
+ * this is a class to send and receive message
+ * @author Alireza Ghafari
+ * @version 2.0
+ */
 public class HttpRequest {
     private URL url;
     private HttpURLConnection httpURLConnection;
@@ -17,6 +26,12 @@ public class HttpRequest {
         getResponse(myRequest.isShouldResponseHeadersBeShown());
     }
 
+    /**
+     * a method to send request
+     * @param method method of request
+     * @param st the url
+     * @param followRedirect to state that url should be redirected or not
+     */
     public void setRequest(String method,String st, boolean followRedirect) {
         // open url connection
         try {
@@ -34,10 +49,24 @@ public class HttpRequest {
         // set request method
         try {
             httpURLConnection.setRequestMethod(method);
+            httpURLConnection.setDoOutput(true);
         } catch (ProtocolException e) {
             e.printStackTrace();
         }
 
+        if(myRequest.hasMessageBody()){
+            DataOutputStream wr = null;
+            try {
+                wr = new DataOutputStream(httpURLConnection.getOutputStream());
+                wr.writeBytes(myRequest.getMessageBody());
+                wr.flush();
+                wr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                this.closeQuietly(wr);
+            }
+        }
 
         // a loop to follow url redirects
         if (followRedirect)
@@ -59,11 +88,28 @@ public class HttpRequest {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                if(myRequest.hasMessageBody()){
+                    DataOutputStream wr = null;
+                    try {
+                        wr = new DataOutputStream(httpURLConnection.getOutputStream());
+                        wr.writeBytes(myRequest.getMessageBody());
+                        wr.flush();
+                        wr.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        this.closeQuietly(wr);
+                    }
+                }
+
             }
         else {
             HttpURLConnection.setFollowRedirects(false);
             httpURLConnection.setInstanceFollowRedirects(false);
         }
+
+
+
 
         // its to confirm that url is valid
         try {
@@ -72,14 +118,40 @@ public class HttpRequest {
             e.printStackTrace();
         }
 
+
     }
 
+    /**
+     * a method to print response
+     * @param shouldResponseHeadersBeShown should response headers be shown or not
+     */
     public void getResponse(boolean shouldResponseHeadersBeShown) {
         if (shouldResponseHeadersBeShown) {
             getResponseHeaders();
         }
+
+        // save response body
+        String responseBody=null;
+        try {
+            responseBody=FileUtils.inputStreamReader(httpURLConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(myRequest.isSaveResponseBody()){
+            if(myRequest.getResponseBody_PATH()==null) {
+                String st=java.time.LocalTime.now().toString().substring(0,8);
+                myRequest.setResponseBody_PATH("../documentations/responses/output_" +st);
+            }
+            FileUtils.fileOutPutStream(responseBody,myRequest.getResponseBody_PATH());
+        }
+
+
+        System.out.println(responseBody);
     }
 
+    /**
+     * a method to get response headers
+     */
     public void getResponseHeaders() {
         for (int i = 0; i < httpURLConnection.getHeaderFields().size(); i++)
             if (i == 0)
@@ -87,6 +159,15 @@ public class HttpRequest {
             else
                 System.out.println(httpURLConnection.getHeaderFieldKey(i) + ": " + httpURLConnection.getHeaderField(i));
 
+    }
+    protected void closeQuietly(Closeable closeable) {
+        try {
+            if( closeable != null ) {
+                closeable.close();
+            }
+        } catch(IOException ex) {
+
+        }
     }
 
 

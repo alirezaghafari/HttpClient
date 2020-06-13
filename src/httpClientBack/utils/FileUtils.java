@@ -12,14 +12,14 @@ import java.io.*;
 public class FileUtils {
     private static final String Request_PATH = "../documentations/requests/";
 
-    static {
-       new File(Request_PATH).mkdirs();
-    }
-
     public static File[] getFilesInDirectory() {
         return new File(Request_PATH).listFiles();
     }
 
+    /**
+     * a method to read saved request
+     * @return request object
+     */
     public static Request objectReader(File file){
         Request request=null;
         try(FileInputStream fis = new FileInputStream(file);
@@ -35,6 +35,10 @@ public class FileUtils {
         return request;
     }
 
+    /**
+     *a method to save request
+     * @param request
+     */
     public static void objectWriter(Request request){
         String st=java.time.LocalTime.now().toString().substring(0,8);
         try (FileOutputStream fos = new FileOutputStream(Request_PATH +"req"+st+".bin");
@@ -46,6 +50,11 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * a method to save setting fields
+     * @param st setting fields
+     */
     public static void settingWriter(String st){
         try(FileWriter fileWriter=new FileWriter("./documentations/setting/Options.txt");
             BufferedWriter bufferedWriter=new BufferedWriter(fileWriter)) {
@@ -55,9 +64,44 @@ public class FileUtils {
         }
     }
 
+    /**
+     * a method to read message body
+     * @param inputStream stream of body
+     * @return a string of body
+     */
+    public static String inputStreamReader(InputStream inputStream){
+        StringBuffer sb=null;
+        try (InputStreamReader in=new InputStreamReader(inputStream)){
+
+            BufferedReader reader = new BufferedReader(in);
+            sb = new StringBuffer();
+            String str;
+            while((str = reader.readLine())!= null){
+                sb.append(str+"\n");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
 
 
-
-
+    /**
+     * a method to write response message in a file
+     * @param content message body
+     * @param path the file path
+     */
+    public static void fileOutPutStream(String content,String path){
+        try (FileOutputStream fos = new FileOutputStream(path)) {
+            byte[] bytes = content.getBytes();
+            fos.write(bytes);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

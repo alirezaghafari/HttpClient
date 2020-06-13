@@ -3,6 +3,11 @@ package httpClientBack;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * this is a class to keep request properties
+ * @author Alireza Ghafari
+ * @version 2.0
+ */
 public class Request implements Serializable {
     private String method = "GET";
     private ArrayList<String> headerFieldKey = new ArrayList<>();
@@ -11,7 +16,25 @@ public class Request implements Serializable {
     private boolean followRedirect = false;
     private boolean shouldResponseHeadersBeShown = false;
     private String messageBody="null";
+    private boolean saveResponseBody=false;
+    private String responseBody_PATH = null;
+    private boolean hasMessageBody=false;
 
+    public boolean hasMessageBody() {
+        return hasMessageBody;
+    }
+
+    public void setHasMessageBody(boolean hasMessageBody) {
+        this.hasMessageBody = hasMessageBody;
+    }
+
+    public void setResponseBody_PATH(String responseBody_PATH) {
+        this.responseBody_PATH = responseBody_PATH;
+    }
+
+    public String getResponseBody_PATH() {
+        return responseBody_PATH;
+    }
 
     public ArrayList<String> getHeaderField() {
         return headerField;
@@ -47,17 +70,8 @@ public class Request implements Serializable {
         this.followRedirect = followRedirect;
     }
 
-    public void setHeaderField(ArrayList<String> headerField) {
-        this.headerField = headerField;
-    }
-
     public void setMethod(String method) {
         this.method = method;
-    }
-
-
-    public void setHeaderFieldKey(ArrayList<String> headerFieldKey) {
-        this.headerFieldKey = headerFieldKey;
     }
 
     public void setShouldResponseHeadersBeShown(boolean shouldResponseHeadersBeShown) {
@@ -74,6 +88,22 @@ public class Request implements Serializable {
             st+="}  |  body: "+messageBody;
         }
         return st;
+    }
+
+    public void setSaveResponseBody(boolean saveResponseBody) {
+        this.saveResponseBody = saveResponseBody;
+    }
+
+    public boolean isSaveResponseBody() {
+        return saveResponseBody;
+    }
+
+    public String getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
     }
 }
 
