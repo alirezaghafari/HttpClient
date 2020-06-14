@@ -284,7 +284,6 @@ public class ComposeRequestPanel extends JPanel {
             bodyPanel.setBackground(defaultLightThemeColor);
             textArea.setBackground(defaultLightThemeColor);
             headerPanel.setBackground(defaultLightThemeColor);
-            checkBox.setBackground(defaultLightThemeColor);
             saveButton.setForeground(Color.darkGray);
             sendButton.setBackground(defaultLightThemeColor);
             sendButton.setForeground(Color.darkGray);
@@ -306,7 +305,6 @@ public class ComposeRequestPanel extends JPanel {
             saveButton.setBackground(defaultDarkThemeColor);
             sendButton.setBackground(defaultDarkThemeColor);
             sendButton.setForeground(Color.white);
-            checkBox.setBackground(defaultDarkThemeColor);
             saveButton.setForeground(Color.white);
             comboBox.setBackground(defaultDarkThemeColor);
 

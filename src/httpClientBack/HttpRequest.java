@@ -28,6 +28,7 @@ public class HttpRequest {
     private Request myRequest;
     private long startTime;
     private long endTime;
+    public static String st;
 
     public HttpRequest(Request myRequest) {
         this.myRequest = myRequest;
@@ -146,7 +147,7 @@ public class HttpRequest {
         }
 
 
-        String st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8);
+        st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8);
         myRequest.setResponseBody_PATH(st);
         FileUtils.fileOutPutStream(responseBody, myRequest.getResponseBody_PATH());
 

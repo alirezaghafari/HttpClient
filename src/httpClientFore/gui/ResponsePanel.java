@@ -1,7 +1,16 @@
 package httpClientFore.gui;
 
+import com.sun.tools.javac.Main;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 
 /**
  * this is the third panel of the mainFrame to show the result of requests
@@ -17,14 +26,15 @@ public class ResponsePanel extends JPanel {
     private JTabbedPane tabbedPane;
     private JPanel tabPanel;
     private JTextField valueField;
+    private Preview previewPanel;
     private JTextField keyField;
     private JPanel panel;
     private JPanel headerPanel;
     private JScrollPane scrollPane;
     private JTextArea textArea;
     private JPanel bodyPanel;
-    private JComboBox bodyComboBox;
     private JButton copyButton;
+    private JTabbedPane bodyTabbedPane;
     private static final Color defaultDarkThemeColor = new Color(45, 48, 55);
     private static final Color defaultLightThemeColor = new Color(251, 246, 227);
 
@@ -73,13 +83,13 @@ public class ResponsePanel extends JPanel {
         tabbedPane = new JTabbedPane();
 
         tabbedPane.setPreferredSize(new Dimension(460, 1020));
-        String[] st2 = {"Raw", "Preview"};
-        bodyComboBox = new JComboBox(st2);
+
+        bodyTabbedPane=new JTabbedPane();
+        bodyTabbedPane.setPreferredSize(new Dimension(460, 1020));
 
         bodyPanel = new JPanel();
         bodyPanel.setPreferredSize(new Dimension(400, 900));
         bodyPanel.setLayout(new BorderLayout(0, 0));
-        bodyPanel.add(bodyComboBox, BorderLayout.NORTH);
         copyButton = new JButton("Copy To Clipboard");
         bodyPanel.add(copyButton, BorderLayout.SOUTH);
         textArea = new JTextArea();
@@ -88,7 +98,14 @@ public class ResponsePanel extends JPanel {
         textArea.setEditable(false);
         bodyPanel.add(scrollPane);
         bodyPanel.add(scrollPane);
-        tabbedPane.add("Body", bodyPanel);
+        bodyTabbedPane.add("Raw",bodyPanel);
+
+        previewPanel=new Preview();
+
+        bodyTabbedPane.add("Preview",previewPanel);
+
+
+        tabbedPane.add("Body", bodyTabbedPane);
 
 
         headerPanel = new JPanel();
@@ -148,9 +165,8 @@ public class ResponsePanel extends JPanel {
             sizeStatus.setBackground(Color.gray);
             tabPanel.setBackground(defaultLightThemeColor);
             textArea.setBackground(defaultLightThemeColor);
-            bodyComboBox.setBackground(defaultLightThemeColor);
             copyButton.setBackground(Color.gray);
-            bodyComboBox.setBackground(Color.gray);
+            previewPanel.setBackground(defaultLightThemeColor);
             setBackground(Color.gray);
 
             codeStatus.setForeground(Color.white);
@@ -179,14 +195,14 @@ public class ResponsePanel extends JPanel {
             sizeStatus.setBackground(Color.gray);
             tabPanel.setBackground(defaultDarkThemeColor);
             textArea.setBackground(defaultDarkThemeColor);
-            bodyComboBox.setBackground(defaultDarkThemeColor);
             copyButton.setBackground(defaultDarkThemeColor);
+
+            previewPanel.setBackground(defaultDarkThemeColor);
 
             codeStatus.setForeground(Color.white);
             timeStatus.setForeground(Color.white);
             sizeStatus.setForeground(Color.white);
             textArea.setForeground(Color.white);
-            bodyComboBox.setForeground(Color.white);
             copyButton.setForeground(Color.white);
 
             for (Component component : headerPanel.getComponents()) {

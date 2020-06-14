@@ -42,6 +42,9 @@ public class MainFrame extends JFrame {
 
     }
 
+    /**
+     * add three main panels
+     */
     private void addPanels() {
         add(myRequestPanel);
         add(composeRequestPanel);
@@ -49,6 +52,9 @@ public class MainFrame extends JFrame {
 
     }
 
+    /**
+     * refresh panels after create new request
+     */
     public void refreshPanels() {
         remove(composeRequestPanel);
         composeRequestPanel = new ComposeRequestPanel();
@@ -63,12 +69,18 @@ public class MainFrame extends JFrame {
 
     }
 
+    /**
+     * add menus
+     */
     public void manageMenu() {
         addApplicationMenu();
         addViewMenu();
         addHelpMenu();
     }
 
+    /**
+     * add application menu item to menu bar
+     */
     public void addApplicationMenu() {
         JMenu application = new JMenu("Application");
 
@@ -96,6 +108,9 @@ public class MainFrame extends JFrame {
         menuBar.add(application);
     }
 
+    /**
+     * add view menu item to menu bar
+     */
     public void addViewMenu() {
         JMenu viewMenu = new JMenu("View");
 
@@ -144,12 +159,21 @@ public class MainFrame extends JFrame {
 
     }
 
+    /**
+     * add help menu item to menu bar
+     */
     public void addHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
 
         //add Help item
         JMenuItem helpItem = new JMenuItem("Help");
         helpItem.setToolTipText("Need any help?");
+        helpItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "\nEnter URL in \"http://...\"  format", null, JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
         helpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK));
         helpMenu.add(helpItem);
 
