@@ -1,9 +1,16 @@
 package httpClientFore.gui;
 
+import httpClientBack.Request;
+import httpClientBack.utils.FileUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 
@@ -15,26 +22,33 @@ import java.io.File;
  */
 public class MyRequestPanel extends JPanel {
     private JComboBox comboBox;
-    private JList<File> requestList;
+    private static JList<File> requestList;
     private JPanel topPanel;
     private JLabel label;
-    private static final Color defaultThemeColor = new Color(25,28,33);
+    private static final Color defaultThemeColor = new Color(25, 28, 33);
+    private MainFrame mainFrame;
+    private File[] files;
 
-    public MyRequestPanel() {
+    public MyRequestPanel(MainFrame mainFrame) {
 
-        setLayout(new BorderLayout(0,0));
+        setLayout(new BorderLayout(0, 0));
+
+        this.mainFrame = mainFrame;
 
         addTopPanel();
         initDirectoryList();
-        if(MainFrame.theme==Theme.dark)
+        if (MainFrame.theme == Theme.dark)
             setTheme("dark");
         else
             setTheme("light");
 
     }
 
+    /**
+     * initialize list of requests
+     */
     private void initDirectoryList() {
-        File[] files = new File("./documentations/requests/").listFiles();
+        files = new File("./documentations/requests/").listFiles();
         requestList = new JList<>(files);
 
 
@@ -46,6 +60,7 @@ public class MyRequestPanel extends JPanel {
         requestList.setMaximumSize(new Dimension(130, 100));
         requestList.setFixedCellWidth(150);
         requestList.setCellRenderer(new MyCellRenderer());
+        requestList.addMouseListener(new MyMouseAdapter());
 
 
         add(new JScrollPane(requestList), BorderLayout.CENTER);
@@ -67,6 +82,14 @@ public class MyRequestPanel extends JPanel {
 
         String[] st = {"", "Request", "Folder"};
         comboBox = new JComboBox(st);
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (comboBox.getSelectedIndex() == 1) {
+                    mainFrame.refreshPanels();
+                }
+            }
+        });
         comboBox.setPreferredSize(new Dimension(100, 20));
         topPanel.add(comboBox);
 
@@ -74,8 +97,14 @@ public class MyRequestPanel extends JPanel {
         topPanel.setBackground(defaultThemeColor);
         add(topPanel, BorderLayout.NORTH);
 
+    }
 
-
+    /**
+     * update list after adding new file
+     */
+    public void updateListGUI() {
+        File[] newFiles = FileUtils.getFilesInDirectory();
+        requestList.setListData(newFiles);
     }
 
     private class MyCellRenderer extends DefaultListCellRenderer {
@@ -98,14 +127,19 @@ public class MyRequestPanel extends JPanel {
             return this;
         }
     }
-    public void setTheme(String st){
-        if(st.equalsIgnoreCase("light")){
-            requestList.setBackground(new Color(34,57,68));
+
+    /**
+     * set panels theme
+     * @param st to state theme should be light or dark
+     */
+    public void setTheme(String st) {
+        if (st.equalsIgnoreCase("light")) {
+            requestList.setBackground(new Color(34, 57, 68));
             requestList.setForeground(Color.white);
-            topPanel.setBackground(new Color(34,57,68));
+            topPanel.setBackground(new Color(34, 57, 68));
             label.setForeground(Color.white);
             setBackground(Color.white);
-        }else{
+        } else {
             requestList.setBackground(defaultThemeColor);
             requestList.setForeground(Color.white);
             topPanel.setBackground(defaultThemeColor);
@@ -113,7 +147,23 @@ public class MyRequestPanel extends JPanel {
             setBackground(defaultThemeColor);
 
         }
+    }
 
+    /**
+     * add handler to list
+     */
+    private class MyMouseAdapter extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent eve) {
+            // Double-click detected
+            if (eve.getClickCount() == 2) {
+                mainFrame.refreshPanels();
+                int index = requestList.locationToIndex(eve.getPoint());
+                Request myRequest = FileUtils.objectReader(FileUtils.getFilesInDirectory()[index]);
+                MainFrame.composeRequestPanel.openExistingRequest(myRequest);
+
+            }
+        }
     }
 
 }

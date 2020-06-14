@@ -8,10 +8,13 @@ import java.awt.*;
 
 /**
  * this is Main class to run main method and create mainframe
+ *
  * @author Alireza Ghafari
  * @version 2.0
  */
 public class Run {
+    public static MainFrame mainFrame;
+
     public static void main(String[] args) {
 
         try {
@@ -24,7 +27,7 @@ public class Run {
         } catch (Exception e) {
         }
 
-        MainFrame mainFrame = new MainFrame("Insomnia");
+        mainFrame = new MainFrame("Insomnia");
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setLayout(new GridLayout(1, 3, 1, 0));
         mainFrame.setSize(1400, 500);

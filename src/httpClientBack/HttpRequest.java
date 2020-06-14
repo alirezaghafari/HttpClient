@@ -2,7 +2,9 @@ package httpClientBack;
 
 
 import httpClientBack.utils.FileUtils;
+import httpClientFore.gui.MainFrame;
 
+import javax.swing.*;
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,9 +12,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * this is a class to send and receive message
+ *
  * @author Alireza Ghafari
  * @version 2.0
  */
@@ -20,19 +26,23 @@ public class HttpRequest {
     private URL url;
     private HttpURLConnection httpURLConnection;
     private Request myRequest;
+    private long startTime;
+    private long endTime;
+
     public HttpRequest(Request myRequest) {
-        this.myRequest=myRequest;
-        setRequest(myRequest.getMethod(),myRequest.getUrl(), myRequest.isFollowRedirect());
-        getResponse(myRequest.isShouldResponseHeadersBeShown());
+        this.myRequest = myRequest;
+        setRequest(myRequest.getMethod(), myRequest.getUrl(), myRequest.isFollowRedirect());
+        getResponse();
     }
 
     /**
      * a method to send request
-     * @param method method of request
-     * @param st the url
+     *
+     * @param method         method of request
+     * @param st             the url
      * @param followRedirect to state that url should be redirected or not
      */
-    public void setRequest(String method,String st, boolean followRedirect) {
+    public void setRequest(String method, String st, boolean followRedirect) {
         // open url connection
         try {
             url = new URL(st);
@@ -41,6 +51,7 @@ public class HttpRequest {
         } finally {
             try {
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+                startTime = System.currentTimeMillis();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -54,7 +65,7 @@ public class HttpRequest {
             e.printStackTrace();
         }
 
-        if(myRequest.hasMessageBody()){
+        if (myRequest.hasMessageBody()) {
             DataOutputStream wr = null;
             try {
                 wr = new DataOutputStream(httpURLConnection.getOutputStream());
@@ -88,7 +99,7 @@ public class HttpRequest {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(myRequest.hasMessageBody()){
+                if (myRequest.hasMessageBody()) {
                     DataOutputStream wr = null;
                     try {
                         wr = new DataOutputStream(httpURLConnection.getOutputStream());
@@ -109,11 +120,10 @@ public class HttpRequest {
         }
 
 
-
-
         // its to confirm that url is valid
         try {
             httpURLConnection.getResponseCode();
+            endTime = System.currentTimeMillis();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,49 +133,63 @@ public class HttpRequest {
 
     /**
      * a method to print response
-     * @param shouldResponseHeadersBeShown should response headers be shown or not
      */
-    public void getResponse(boolean shouldResponseHeadersBeShown) {
-        if (shouldResponseHeadersBeShown) {
-            getResponseHeaders();
-        }
+    public void getResponse() {
+        getResponseHeaders();
 
         // save response body
-        String responseBody=null;
+        String responseBody = null;
         try {
-            responseBody=FileUtils.inputStreamReader(httpURLConnection.getInputStream());
+            responseBody = FileUtils.inputStreamReader(httpURLConnection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(myRequest.isSaveResponseBody()){
-            if(myRequest.getResponseBody_PATH()==null) {
-                String st=java.time.LocalTime.now().toString().substring(0,8);
-                myRequest.setResponseBody_PATH("../documentations/responses/output_" +st);
-            }
-            FileUtils.fileOutPutStream(responseBody,myRequest.getResponseBody_PATH());
+
+
+        String st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8);
+        myRequest.setResponseBody_PATH(st);
+        FileUtils.fileOutPutStream(responseBody, myRequest.getResponseBody_PATH());
+
+
+        MainFrame.responsePanel.getTextArea().setText(responseBody);
+        try {
+            MainFrame.responsePanel.getCodeStatus().setText(httpURLConnection.getResponseCode() + " " + (httpURLConnection.getResponseMessage()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-
-        System.out.println(responseBody);
+        MainFrame.responsePanel.getTimeStatus().setText(endTime - startTime + "ms");
+        Path filePath = Paths.get(st);
+        try {
+            MainFrame.responsePanel.getSizeStatus().setText(String.valueOf(Files.size(filePath)) + " bytes");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * a method to get response headers
      */
     public void getResponseHeaders() {
-        for (int i = 0; i < httpURLConnection.getHeaderFields().size(); i++)
-            if (i == 0)
-                System.out.println(httpURLConnection.getHeaderField(i));
-            else
-                System.out.println(httpURLConnection.getHeaderFieldKey(i) + ": " + httpURLConnection.getHeaderField(i));
+        for (int i = 1; i < httpURLConnection.getHeaderFields().size(); i++) {
+            MainFrame.responsePanel.addKeyAndValue();
+            JPanel tempPanel = (JPanel) MainFrame.responsePanel.getHeaderPanel().getComponent(i - 1);
+            JTextField key = (JTextField) (((JScrollPane) tempPanel.getComponent(0)).getViewport()).getView();
+            JTextField value = (JTextField) (((JScrollPane) tempPanel.getComponent(1)).getViewport()).getView();
+            key.setText(httpURLConnection.getHeaderFieldKey(i));
+            value.setText(httpURLConnection.getHeaderField(i));
+            MainFrame.responsePanel.revalidate();
+            MainFrame.responsePanel.repaint();
+
+        }
 
     }
+
     protected void closeQuietly(Closeable closeable) {
         try {
-            if( closeable != null ) {
+            if (closeable != null) {
                 closeable.close();
             }
-        } catch(IOException ex) {
+        } catch (IOException ex) {
 
         }
     }

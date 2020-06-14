@@ -3,22 +3,24 @@ package httpClientFore.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-enum Theme{
-    dark,light
+
+enum Theme {
+    dark, light
 }
+
 /**
  * this is a class which extends JFrame class and it has containers
+ *
  * @author Alireza Ghafari
  * @version 2.0
  */
-public class MainFrame extends JFrame  {
+public class MainFrame extends JFrame {
     static MyRequestPanel myRequestPanel;
     static ComposeRequestPanel composeRequestPanel;
-    static ResponsePanel responsePanel;
+    public static ResponsePanel responsePanel;
     private JMenuBar menuBar;
 
-    static Theme theme=Theme.dark;
-
+    static Theme theme = Theme.dark;
 
 
     public MainFrame(String title) {
@@ -26,7 +28,7 @@ public class MainFrame extends JFrame  {
         setBackground(Color.black);
 
 
-        myRequestPanel = new MyRequestPanel();
+        myRequestPanel = new MyRequestPanel(this);
         composeRequestPanel = new ComposeRequestPanel();
         responsePanel = new ResponsePanel();
         addPanels();
@@ -47,13 +49,27 @@ public class MainFrame extends JFrame  {
 
     }
 
+    public void refreshPanels() {
+        remove(composeRequestPanel);
+        composeRequestPanel = new ComposeRequestPanel();
+        add(composeRequestPanel);
+
+        remove(responsePanel);
+        responsePanel = new ResponsePanel();
+        add(responsePanel);
+
+        revalidate();
+        repaint();
+
+    }
+
     public void manageMenu() {
         addApplicationMenu();
         addViewMenu();
         addHelpMenu();
     }
 
-    public void addApplicationMenu(){
+    public void addApplicationMenu() {
         JMenu application = new JMenu("Application");
 
         //add exit item
@@ -80,7 +96,7 @@ public class MainFrame extends JFrame  {
         menuBar.add(application);
     }
 
-    public void addViewMenu(){
+    public void addViewMenu() {
         JMenu viewMenu = new JMenu("View");
 
         //add toggle fullScreen item
@@ -88,7 +104,7 @@ public class MainFrame extends JFrame  {
         toggleFullscreen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(MainFrame.this.getExtendedState()==0)
+                if (MainFrame.this.getExtendedState() == 0)
                     MainFrame.this.setExtendedState(Frame.MAXIMIZED_BOTH);
                 else
                     MainFrame.this.setExtendedState(Frame.NORMAL);
@@ -103,14 +119,14 @@ public class MainFrame extends JFrame  {
         JMenuItem toggleSlideBar = new JMenuItem("Toggle Sidebar");
         toggleSlideBar.addActionListener(new ActionListener() {
             boolean isFrameOnSlideBar = true;
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(isFrameOnSlideBar) {
+                if (isFrameOnSlideBar) {
                     MainFrame.this.remove(myRequestPanel);
                     isFrameOnSlideBar = false;
-                }
-                else {
-                    MainFrame.this.add(myRequestPanel,0);
+                } else {
+                    MainFrame.this.add(myRequestPanel, 0);
                     isFrameOnSlideBar = true;
                 }
                 MainFrame.this.revalidate();
@@ -123,12 +139,12 @@ public class MainFrame extends JFrame  {
         viewMenu.add(toggleSlideBar);
 
 
-
         viewMenu.setMnemonic(KeyEvent.VK_V);
         menuBar.add(viewMenu);
 
     }
-    public void addHelpMenu(){
+
+    public void addHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
 
         //add Help item
@@ -143,12 +159,11 @@ public class MainFrame extends JFrame  {
         aboutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Author: Alireza Ghafari\nID: 9831115\nContact: areza.ghafari01@gmail.com");
+                JOptionPane.showMessageDialog(null, "Author: Alireza Ghafari\nID: 9831115\nContact: areza.ghafari01@gmail.com");
             }
         });
         aboutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_DOWN_MASK));
         helpMenu.add(aboutItem);
-
 
 
         helpMenu.setMnemonic(KeyEvent.VK_H);

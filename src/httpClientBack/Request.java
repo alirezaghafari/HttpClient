@@ -5,23 +5,32 @@ import java.util.ArrayList;
 
 /**
  * this is a class to keep request properties
+ *
  * @author Alireza Ghafari
  * @version 2.0
  */
 public class Request implements Serializable {
+    private String name;
     private String method = "GET";
     private ArrayList<String> headerFieldKey = new ArrayList<>();
     private ArrayList<String> headerField = new ArrayList<>();
     private String url = null;
     private boolean followRedirect = false;
-    private boolean shouldResponseHeadersBeShown = false;
-    private String messageBody="null";
-    private boolean saveResponseBody=false;
+    private String messageBody = "null";
+    private boolean saveResponseBody = false;
     private String responseBody_PATH = null;
-    private boolean hasMessageBody=false;
+    private boolean hasMessageBody = false;
 
     public boolean hasMessageBody() {
         return hasMessageBody;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setHasMessageBody(boolean hasMessageBody) {
@@ -57,10 +66,6 @@ public class Request implements Serializable {
     }
 
 
-    public boolean isShouldResponseHeadersBeShown() {
-        return shouldResponseHeadersBeShown;
-    }
-
     public boolean isFollowRedirect() {
         return followRedirect;
     }
@@ -74,18 +79,15 @@ public class Request implements Serializable {
         this.method = method;
     }
 
-    public void setShouldResponseHeadersBeShown(boolean shouldResponseHeadersBeShown) {
-        this.shouldResponseHeadersBeShown = shouldResponseHeadersBeShown;
-    }
 
     @Override
     public String toString() {
-        String st= "url: "+url+"  |  method: "+method;
-        if(headerFieldKey.size()>0) {
-            st+="  |  headers: {";
-            for (int i = 0; i < headerFieldKey.size();i++)
-                st+=" "+headerFieldKey.get(i)+":"+headerField.get(i)+"  ";
-            st+="}  |  body: "+messageBody;
+        String st = "url: " + url + "  |  method: " + method;
+        if (headerFieldKey.size() > 0) {
+            st += "  |  headers: {";
+            for (int i = 0; i < headerFieldKey.size(); i++)
+                st += " " + headerFieldKey.get(i) + ":" + headerField.get(i) + "  ";
+            st += "}  |  body: " + messageBody;
         }
         return st;
     }
