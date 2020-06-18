@@ -1,15 +1,12 @@
 package httpClientFore.gui;
 
-import com.sun.tools.javac.Main;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 
 /**
@@ -26,7 +23,7 @@ public class ResponsePanel extends JPanel {
     private JTabbedPane tabbedPane;
     private JPanel tabPanel;
     private JTextField valueField;
-    private Preview previewPanel;
+    public  Preview previewPanel;
     private JTextField keyField;
     private JPanel panel;
     private JPanel headerPanel;
@@ -35,6 +32,9 @@ public class ResponsePanel extends JPanel {
     private JPanel bodyPanel;
     private JButton copyButton;
     private JTabbedPane bodyTabbedPane;
+    private JPanel copyPanel;
+    private JPanel mainHeaderPanel;
+    private JButton bodyCopyButton;
     private static final Color defaultDarkThemeColor = new Color(45, 48, 55);
     private static final Color defaultLightThemeColor = new Color(251, 246, 227);
 
@@ -90,14 +90,23 @@ public class ResponsePanel extends JPanel {
         bodyPanel = new JPanel();
         bodyPanel.setPreferredSize(new Dimension(400, 900));
         bodyPanel.setLayout(new BorderLayout(0, 0));
-        copyButton = new JButton("Copy To Clipboard");
-        bodyPanel.add(copyButton, BorderLayout.SOUTH);
         textArea = new JTextArea();
         textArea.setFont(new Font("Arial", 10, 13));
         scrollPane = new JScrollPane(textArea);
         textArea.setEditable(false);
         bodyPanel.add(scrollPane);
         bodyPanel.add(scrollPane);
+        bodyCopyButton=new JButton("Copy To Clipboard");
+        bodyCopyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String bodyContent=textArea.getText();
+                StringSelection stringSelection = new StringSelection(bodyContent);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection,null);
+            }
+        });
+        bodyPanel.add(bodyCopyButton,BorderLayout.SOUTH);
         bodyTabbedPane.add("Raw",bodyPanel);
 
         previewPanel=new Preview();
@@ -108,10 +117,34 @@ public class ResponsePanel extends JPanel {
         tabbedPane.add("Body", bodyTabbedPane);
 
 
+        mainHeaderPanel=new JPanel(new BorderLayout());
+
+        copyPanel=new JPanel();
+        copyButton = new JButton("Copy To Clipboard");
+        copyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String headersContent="";
+                for(int i=0;i<headerPanel.getComponentCount();i++) {
+                    JPanel tempPanel = (JPanel) MainFrame.responsePanel.getHeaderPanel().getComponent(i);
+                    JTextField key = (JTextField) (((JScrollPane) tempPanel.getComponent(0)).getViewport()).getView();
+                    JTextField value = (JTextField) (((JScrollPane) tempPanel.getComponent(1)).getViewport()).getView();
+                    headersContent+=key.getText()+": "+value.getText()+"\n";
+                }
+                StringSelection stringSelection = new StringSelection(headersContent);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection,null);
+            }
+        });
+        copyPanel.add(copyButton);
+        mainHeaderPanel.add(copyButton,BorderLayout.NORTH);
+
+
         headerPanel = new JPanel();
         headerPanel.setLayout(new GridLayout(20, 1));
-        tabbedPane.add("Header", headerPanel);
+        mainHeaderPanel.add( headerPanel);
 
+        tabbedPane.add("Headers",mainHeaderPanel);
         tabPanel.add(tabbedPane);
 
         add(tabPanel);
@@ -165,8 +198,11 @@ public class ResponsePanel extends JPanel {
             sizeStatus.setBackground(Color.gray);
             tabPanel.setBackground(defaultLightThemeColor);
             textArea.setBackground(defaultLightThemeColor);
-            copyButton.setBackground(Color.gray);
+            copyButton.setBackground(Color.white);
+            bodyCopyButton.setBackground(Color.white);
             previewPanel.setBackground(defaultLightThemeColor);
+            mainHeaderPanel.setBackground(defaultLightThemeColor);
+            copyPanel.setBackground(defaultLightThemeColor);
             setBackground(Color.gray);
 
             codeStatus.setForeground(Color.white);
@@ -174,6 +210,7 @@ public class ResponsePanel extends JPanel {
             sizeStatus.setForeground(Color.white);
             textArea.setForeground(Color.darkGray);
             copyButton.setForeground(Color.darkGray);
+            bodyCopyButton.setForeground(Color.darkGray);
 
             for (Component component : headerPanel.getComponents()) {
                 JPanel tempPanel = (JPanel) component;
@@ -196,6 +233,9 @@ public class ResponsePanel extends JPanel {
             tabPanel.setBackground(defaultDarkThemeColor);
             textArea.setBackground(defaultDarkThemeColor);
             copyButton.setBackground(defaultDarkThemeColor);
+            bodyCopyButton.setBackground(defaultDarkThemeColor);
+            mainHeaderPanel.setBackground(defaultDarkThemeColor);
+            copyPanel.setBackground(defaultDarkThemeColor);
 
             previewPanel.setBackground(defaultDarkThemeColor);
 
@@ -204,6 +244,7 @@ public class ResponsePanel extends JPanel {
             sizeStatus.setForeground(Color.white);
             textArea.setForeground(Color.white);
             copyButton.setForeground(Color.white);
+            bodyCopyButton.setForeground(Color.white);
 
             for (Component component : headerPanel.getComponents()) {
                 JPanel tempPanel = (JPanel) component;

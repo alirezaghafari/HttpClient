@@ -82,6 +82,7 @@ public class ComposeRequestPanel extends JPanel {
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Run.mainFrame.refreshResponsePanel();
                 sendNewRequestToBackCode();
             }
         });

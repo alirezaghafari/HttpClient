@@ -5,9 +5,7 @@ import httpClientBack.utils.FileUtils;
 import httpClientFore.gui.MainFrame;
 
 import javax.swing.*;
-import java.io.Closeable;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -120,7 +118,8 @@ public class HttpRequest {
             httpURLConnection.setInstanceFollowRedirects(false);
         }
 
-
+        httpURLConnection.setConnectTimeout(10000);
+        httpURLConnection.setReadTimeout(10000);
         // its to confirm that url is valid
         try {
             httpURLConnection.getResponseCode();
@@ -128,7 +127,6 @@ public class HttpRequest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -145,12 +143,16 @@ public class HttpRequest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8);
-        myRequest.setResponseBody_PATH(st);
-        FileUtils.fileOutPutStream(responseBody, myRequest.getResponseBody_PATH());
 
+
+        if(httpURLConnection.getHeaderFields().toString().contains("image/png")||httpURLConnection.getHeaderFields().toString().contains("image/jpeg")||httpURLConnection.getHeaderFields().toString().contains("image/jpg")) {
+            FileUtils.saveImage(myRequest.getUrl(), st+".jpeg");
+            MainFrame.responsePanel.previewPanel.previewImage();
+        }else{
+            myRequest.setResponseBody_PATH(st+".txt");
+            FileUtils.fileOutPutStream(responseBody, myRequest.getResponseBody_PATH());
+        }
 
         MainFrame.responsePanel.getTextArea().setText(responseBody);
         try {
@@ -161,7 +163,7 @@ public class HttpRequest {
         MainFrame.responsePanel.getTimeStatus().setText(endTime - startTime + "ms");
         Path filePath = Paths.get(st);
         try {
-            MainFrame.responsePanel.getSizeStatus().setText(String.valueOf(Files.size(filePath)) + " bytes");
+            MainFrame.responsePanel.getSizeStatus().setText(Files.size(filePath) + " bytes");
         } catch (IOException e) {
             e.printStackTrace();
         }

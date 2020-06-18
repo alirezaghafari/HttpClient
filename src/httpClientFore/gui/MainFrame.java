@@ -53,13 +53,22 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * refresh panels after create new request
+     * refresh panel after create new request
      */
-    public void refreshPanels() {
+    public void refreshComposePanel() {
         remove(composeRequestPanel);
         composeRequestPanel = new ComposeRequestPanel();
         add(composeRequestPanel);
 
+        revalidate();
+        repaint();
+
+    }
+
+    /**
+     * refresh panel after create new request
+     */
+    public void refreshResponsePanel() {
         remove(responsePanel);
         responsePanel = new ResponsePanel();
         add(responsePanel);
@@ -68,6 +77,7 @@ public class MainFrame extends JFrame {
         repaint();
 
     }
+
 
     /**
      * add menus
@@ -171,7 +181,7 @@ public class MainFrame extends JFrame {
         helpItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "\nEnter URL in \"http://...\"  format", null, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "\nEnter URL in \"http://...\"  format\nChoose your request method from comboBox\nIf response has jpeg format message you can see it in preview bar", null, JOptionPane.INFORMATION_MESSAGE);
             }
         });
         helpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK));

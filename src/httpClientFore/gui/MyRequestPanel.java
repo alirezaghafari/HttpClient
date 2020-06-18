@@ -86,7 +86,8 @@ public class MyRequestPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (comboBox.getSelectedIndex() == 1) {
-                    mainFrame.refreshPanels();
+                    mainFrame.refreshComposePanel();
+                    mainFrame.refreshResponsePanel();
                 }
             }
         });
@@ -157,7 +158,8 @@ public class MyRequestPanel extends JPanel {
         public void mouseClicked(MouseEvent eve) {
             // Double-click detected
             if (eve.getClickCount() == 2) {
-                mainFrame.refreshPanels();
+                mainFrame.refreshComposePanel();
+                mainFrame.refreshResponsePanel();
                 int index = requestList.locationToIndex(eve.getPoint());
                 Request myRequest = FileUtils.objectReader(FileUtils.getFilesInDirectory()[index]);
                 MainFrame.composeRequestPanel.openExistingRequest(myRequest);

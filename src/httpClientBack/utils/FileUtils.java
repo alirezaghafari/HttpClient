@@ -3,6 +3,8 @@ package httpClientBack.utils;
 import httpClientBack.Request;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * a class to manage any operation on files
@@ -75,21 +77,17 @@ public class FileUtils {
      * @return a string of body
      */
     public static String inputStreamReader(InputStream inputStream) {
-        StringBuffer sb = null;
+        String str="";
         try (InputStreamReader in = new InputStreamReader(inputStream)) {
-
-            BufferedReader reader = new BufferedReader(in);
-            sb = new StringBuffer();
-            String str;
-            while ((str = reader.readLine()) != null) {
-                sb.append(str + "\n");
+            while (in.ready()) {
+                str+=(char)in.read();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sb.toString();
+        return str;
     }
 
 
@@ -110,4 +108,57 @@ public class FileUtils {
         }
     }
 
+
+    /**
+     * a method to save image in a file
+     * @param imageUrl the url
+     * @param destinationFile path of file
+     */
+    public static void saveImage(String imageUrl, String destinationFile) {
+        URL url = null;
+        try {
+            url = new URL(imageUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        InputStream is = null;
+        try {
+            is = url.openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(destinationFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        byte[] b = new byte[1000000000];
+        int length = 0;
+
+        while (true) {
+            try {
+                if (!((length = is.read(b)) != -1)) break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                os.write(b, 0, length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
