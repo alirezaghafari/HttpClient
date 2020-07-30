@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * this is a class to keep request properties
  *
  * @author Alireza Ghafari
- * @version 2.0
+ * @version 7.30.20
  */
 public class Request implements Serializable {
     private String name;

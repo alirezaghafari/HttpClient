@@ -10,7 +10,7 @@ import java.net.URL;
  * a class to manage any operation on files
  *
  * @author Alireza Ghafari
- * @version 1.0
+ * @version 7.30.20
  */
 public class FileUtils {
     private static final String Request_PATH = "./documentations/requests/";

@@ -2,7 +2,7 @@ package httpClientBack;
 
 
 import httpClientBack.utils.FileUtils;
-import httpClientFore.gui.MainFrame;
+import httpClientFront.gui.MainFrame;
 
 import javax.swing.*;
 import java.io.*;
@@ -13,12 +13,13 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * this is a class to send and receive message
  *
  * @author Alireza Ghafari
- * @version 2.0
+ * @version 7.30.20
  */
 public class HttpRequest {
     private URL url;
@@ -143,18 +144,25 @@ public class HttpRequest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8);
-
-
-        if(httpURLConnection.getHeaderFields().toString().contains("image/png")||httpURLConnection.getHeaderFields().toString().contains("image/jpeg")||httpURLConnection.getHeaderFields().toString().contains("image/jpg")) {
-            FileUtils.saveImage(myRequest.getUrl(), st+".jpeg");
+        if(httpURLConnection.getHeaderField("Content-Type").contains("image")||httpURLConnection.getHeaderField("Content-Type").contains("png")||httpURLConnection.getHeaderField("Content-Type").contains("jpeg")||httpURLConnection.getHeaderField("Content-Type").contains("jpg")) {
+            st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8) + ".jpeg";
+            FileUtils.saveImage(myRequest.getUrl(), st);
             MainFrame.responsePanel.previewPanel.previewImage();
         }else{
-            myRequest.setResponseBody_PATH(st+".txt");
+            st = "./documentations/responses/output_" + java.time.LocalTime.now().toString().substring(0, 8) + ".txt";
+            myRequest.setResponseBody_PATH(st );
             FileUtils.fileOutPutStream(responseBody, myRequest.getResponseBody_PATH());
         }
 
-        MainFrame.responsePanel.getTextArea().setText(responseBody);
+
+        char[] ch=responseBody.toCharArray();
+        String str="";
+        for(int i =0;i<ch.length;i++){
+            str+=ch[i];
+            if(i%60==0&&i!=0)
+                str+="\n";
+        }
+        MainFrame.responsePanel.getTextArea().setText(str);
         try {
             MainFrame.responsePanel.getCodeStatus().setText(httpURLConnection.getResponseCode() + " " + (httpURLConnection.getResponseMessage()));
         } catch (IOException e) {
